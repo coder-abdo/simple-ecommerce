@@ -14,6 +14,7 @@ import {
   ModalOverlay,
   ModalCloseButton,
   useDisclosure,
+  Button,
 } from "@chakra-ui/react";
 
 export default function Product({ product }) {
@@ -28,21 +29,32 @@ export default function Product({ product }) {
         objectFit="cover"
         src={product.featuredPhoto}
         alt={product.name}
-        fallback="https://via.placeholder.com/250"
+        fallback="images/product.jpg"
       />
       <Text fontSize="md">{product.name}</Text>
-      <Flex display="flex" justifyContent="space-between" alignItems="center">
+      <Flex
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mt="5"
+      >
         <Stack direction="row" alignItems="center">
-          <Badge variant="solid" colorScheme="blackAlpha">
+          <Badge
+            variant="solid"
+            colorScheme="blackAlpha"
+            textAlign="center"
+            alignItems="center"
+            p="2"
+          >
             {product.rate} <StarIcon />
           </Badge>
-          <Text fontSize="sm" textTransform="capitalize">
+          <Text fontSize="md" textTransform="capitalize">
             {product.reviewsCount} reviews
           </Text>
         </Stack>
-        <Text fontSize="sm" fontWeight="large">
+        <Text fontSize="lg" fontWeight="large">
           {" "}
-          price: {product.price}$
+          Price: {product.price}$
         </Text>
       </Flex>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -61,6 +73,9 @@ export default function Product({ product }) {
           </ModalBody>
         </ModalContent>
       </Modal>
+      <Button size="lg" colorScheme="whatsapp" alignSelf="center" mt="5">
+        Add To Cart
+      </Button>
     </ListItem>
   );
 }
