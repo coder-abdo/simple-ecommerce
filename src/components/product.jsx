@@ -1,11 +1,27 @@
 import React from "react";
 import { StarIcon } from "@chakra-ui/icons";
-import { Badge, Image, ListItem, Text, Flex, Stack } from "@chakra-ui/react";
+import {
+  Badge,
+  Image,
+  ListItem,
+  Text,
+  Flex,
+  Stack,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  ModalCloseButton,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 export default function Product({ product }) {
+  const { onOpen, isOpen, onClose } = useDisclosure();
   return (
     <ListItem>
       <Image
+        onClick={onOpen}
         maxWidth="100%"
         width="100%"
         height="250px"
@@ -29,6 +45,22 @@ export default function Product({ product }) {
           price: {product.price}$
         </Text>
       </Flex>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{product.name}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Image
+              width="100%"
+              objectFit="cover"
+              height="150px"
+              src={product.featuredPhoto}
+              alt={product.name}
+            />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </ListItem>
   );
 }

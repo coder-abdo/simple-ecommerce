@@ -28,7 +28,9 @@ export default function Home() {
   };
   return (
     <div className="products-container">
-      <Heading size="lg" mb="5">Products</Heading>
+      <Heading size="lg" mb="5">
+        Products
+      </Heading>
       <Products products={currentProducts} />
       <Pagination {...paginationProps} />
     </div>
