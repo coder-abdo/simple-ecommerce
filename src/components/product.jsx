@@ -1,5 +1,4 @@
-import React from "react";
-import { StarIcon } from "@chakra-ui/icons";
+import React, { useMemo } from "react";
 import {
   Badge,
   Image,
@@ -17,9 +16,42 @@ import {
   Button,
   ModalFooter,
 } from "@chakra-ui/react";
+import { ADD_TO_CART, useCart } from "../store/store";
+import { StarIcon } from "@chakra-ui/icons";
 
 export default function Product({ product }) {
   const { onOpen, isOpen, onClose } = useDisclosure();
+  const { state, dispatch } = useCart();
+
+  function calcTotal() {
+    let productsPrices;
+    let total;
+    productsPrices = state.cart.map((p) => +p.price * p.quantity);
+	  console.log(productsPrices)
+    total = productsPrices.reduce((acc, next) => acc + next, 0);
+    return total;
+  }
+  const computedTotal = useMemo(() => {
+    return calcTotal();
+  }, [state.cart, state.total]);
+  const addToCart = (product) => {
+    let cart = [];
+    const existedProduct = state.cart.find(
+      (foundProduct) => foundProduct.id === product.id
+    );
+
+    if (existedProduct) {
+      cart = state.cart.map((p) => {
+        if (p.id === existedProduct.id) {
+          return { ...existedProduct, quantity: existedProduct.quantity + 1 };
+        }
+      });
+    } else {
+      product.quantity = 1;
+      cart = [...state.cart, product];
+    }
+    dispatch({ type: ADD_TO_CART, payload: { cart, total: computedTotal } });
+  };
   return (
     <ListItem boxShadow="xs" pb="2">
       <Image
@@ -69,8 +101,6 @@ export default function Product({ product }) {
           <ModalCloseButton />
           <ModalBody>
             <Image
-              width="100%"
-              objectFit="cover"
               height="180px"
               src={product.featuredPhoto}
               alt={product.name}
@@ -112,16 +142,22 @@ export default function Product({ product }) {
             <Button
               size="lg"
               colorScheme="whatsapp"
-              alignSelf="center"
               mt="5"
               ml="2"
+              onClick={() => addToCart(product)}
             >
               Add To Cart
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <Button size="lg" colorScheme="whatsapp" alignSelf="center" mt="5" ml="2">
+      <Button
+        size="lg"
+        colorScheme="whatsapp"
+        mt="5"
+        ml="2"
+        onClick={() => addToCart(product)}
+      >
         Add To Cart
       </Button>
     </ListItem>
