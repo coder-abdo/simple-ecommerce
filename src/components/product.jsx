@@ -1,4 +1,5 @@
-import React, { useMemo } from "react";
+/* eslint-disable*/
+import React from "react";
 import {
   Badge,
   Image,
@@ -23,18 +24,8 @@ export default function Product({ product }) {
   const { onOpen, isOpen, onClose } = useDisclosure();
   const { state, dispatch } = useCart();
 
-  function calcTotal() {
-    let productsPrices;
-    let total;
-    productsPrices = state.cart.map((p) => +p.price * p.quantity);
-	  console.log(productsPrices)
-    total = productsPrices.reduce((acc, next) => acc + next, 0);
-    return total;
-  }
-  const computedTotal = useMemo(() => {
-    return calcTotal();
-  }, [state.cart, state.total]);
   const addToCart = (product) => {
+    let total = 0;
     let cart = [];
     const existedProduct = state.cart.find(
       (foundProduct) => foundProduct.id === product.id
@@ -50,8 +41,14 @@ export default function Product({ product }) {
       product.quantity = 1;
       cart = [...state.cart, product];
     }
-    dispatch({ type: ADD_TO_CART, payload: { cart, total: computedTotal } });
+    total =
+      cart.length > 0 &&
+      cart
+        .map((p) => +p.price * +p.quantity)
+        .reduce((acc, next) => acc + next, 0);
+    dispatch({ type: ADD_TO_CART, payload: { cart, total } });
   };
+
   return (
     <ListItem boxShadow="xs" pb="2">
       <Image
