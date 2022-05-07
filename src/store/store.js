@@ -7,20 +7,24 @@ const initialState = {
 export const ADD_TO_CART = "ADD_TO_CART";
 export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
 export const CLEAR_CART = "CLEAR_CART";
+export const DECREASE_QUANTITY = "DECREASE_QUANTITY";
+export const ICREASE_QUANTITY = "ICREASE_QUANTITY";
 
 function reducer(state = initialState, { type, payload }) {
   switch (type) {
     case ADD_TO_CART:
+    case REMOVE_FROM_CART:
       return {
         ...state,
         cart: payload.cart,
         total: payload.total,
       };
-    case REMOVE_FROM_CART:
-      const newCart = state.cart.filter((product) => product.id !== payload.id);
-      return { ...state, cart: newCart, total: payload.total };
+
     case CLEAR_CART:
       return { ...state, cart: [], total: 0 };
+    case DECREASE_QUANTITY:
+    case ICREASE_QUANTITY:
+      return { ...state, total: payload };
     default:
       return state;
   }

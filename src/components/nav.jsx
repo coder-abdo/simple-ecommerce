@@ -10,6 +10,7 @@ import {
   Spacer,
   MenuGroup,
   MenuDivider,
+  Text,
 } from "@chakra-ui/react";
 import {
   FaShoppingCart,
@@ -48,20 +49,36 @@ export const Nav = () => {
                 <MenuItem>No Items Added Yet</MenuItem>
               )}
             </MenuGroup>
+            {state.cart.length > 0 && (
+              <MenuItem
+                display="flex"
+                justifyContent="space-around"
+                alignItems="center"
+              >
+                <Text fontSize="lg" fontWeight="bold">
+                  Total:
+                </Text>
+                <Text fontSize="xl" fontWeight="bold">
+                  {state.total}$
+                </Text>
+              </MenuItem>
+            )}
             <MenuDivider />
             <MenuGroup>
               <Flex>
-                <MenuItem w="50%">
+                <MenuItem w={state.cart.length > 0 ? "50%" : "100%"}>
                   <Link to="/cart">Checkout</Link>
                 </MenuItem>
-                <MenuItem
-                  w="50%"
-                  display="flex"
-                  justifyContent="center"
-                  onClick={clearCart}
-                >
-                  <FaTrash color="red" fontSize="xl" />
-                </MenuItem>
+                {state.cart.length > 0 && (
+                  <MenuItem
+                    w="50%"
+                    display="flex"
+                    justifyContent="center"
+                    onClick={clearCart}
+                  >
+                    <FaTrash color="red" fontSize="xl" />
+                  </MenuItem>
+                )}
               </Flex>
             </MenuGroup>
           </MenuList>

@@ -19,33 +19,14 @@ import {
 } from "@chakra-ui/react";
 import { ADD_TO_CART, useCart } from "../store/store";
 import { StarIcon } from "@chakra-ui/icons";
+import { addItemsToCart } from "../utils";
 
 export default function Product({ product }) {
   const { onOpen, isOpen, onClose } = useDisclosure();
   const { state, dispatch } = useCart();
 
   const addToCart = (product) => {
-    let total = 0;
-    let cart = [];
-    const existedProduct = state.cart.find(
-      (foundProduct) => foundProduct.id === product.id
-    );
-
-    if (existedProduct) {
-      cart = state.cart.map((p) => {
-        if (p.id === existedProduct.id) {
-          return { ...existedProduct, quantity: existedProduct.quantity + 1 };
-        }
-      });
-    } else {
-      product.quantity = 1;
-      cart = [...state.cart, product];
-    }
-    total =
-      cart.length > 0 &&
-      cart
-        .map((p) => +p.price * +p.quantity)
-        .reduce((acc, next) => acc + next, 0);
+    const { cart, total } = addItemsToCart(product, state);
     dispatch({ type: ADD_TO_CART, payload: { cart, total } });
   };
 
